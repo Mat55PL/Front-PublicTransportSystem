@@ -1,231 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
-    <link
-      rel="icon"
-      href="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/facebook/65/oncoming-bus_1f68d.png"
-    />
 
-    <title>Pojazdy</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="bus.css" type="text/css" />
+  <link rel="icon"
+    href="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/facebook/65/oncoming-bus_1f68d.png" />
 
-    <style>
-      *,
-      *::before,
-      *::after {
-        margin: 0;
-        padding: 0;
-        box-sizing: inherit;
+  <title>Pojazdy</title>
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: inherit;
+    }
+
+    html {
+      font-size: 62.5%;
+      box-sizing: border-box;
+    }
+
+    body {
+      padding: 5rem 5rem 10rem;
+      line-height: 1.7;
+      font-family: 'Kanit', sans-serif;
+      color: #555;
+      min-height: 100vh;
+      background: linear-gradient(to bottom right, #9be15d, #00e3ae);
+    }
+
+    h1 {
+      font-family: 'Kanit', sans-serif;
+      font-size: 5rem;
+      color: white;
+      transform: skewY(-5deg);
+      text-align: center;
+      position: relative;
+      word-spacing: 3px;
+    }
+
+    h1::before {
+      content: '';
+      display: block;
+      height: 65%;
+      width: 49%;
+      position: absolute;
+      top: 105%;
+      left: 50%;
+      background: linear-gradient(to bottom, #9be15d, #00e3ae);
+      opacity: 0.8;
+      z-index: -1;
+      transform: skewY(370deg) translate(-50%, -50%);
+    }
+
+    .container {
+      width: 95rem;
+      margin: 0 auto;
+    }
+
+    .cards-container {
+      margin-top: 8rem;
+    }
+
+    .card {
+      background: white;
+      box-shadow: 0 2rem 6rem 1rem rgba(0, 0, 0, 0.15);
+      margin-bottom: 5rem;
+      transform: skewX(-20deg);
+      display: flex;
+      transition: all 0.5s;
+    }
+
+    .card__emoji {
+      font-size: 4rem;
+      line-height: 1.2;
+      padding: 1.5rem 3rem 0.5rem 1.5rem;
+    }
+
+    .card__title-box {
+      background: linear-gradient(to bottom, #9be15d, #00e3ae);
+      margin-right: auto;
+      display: flex;
+      align-items: center;
+      padding: 0 3rem;
+    }
+
+    .card__title {
+      font-family: 'Kanit', sans-serif;
+      color: white;
+      font-size: 3.25rem;
+      transform: skewX(20deg);
+    }
+
+    .card__details {
+      display: flex;
+    }
+
+    .card__detail-box {
+      align-self: stretch;
+      border-right: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+    }
+
+    .card__detail-box:last-child {
+      border: none;
+    }
+
+    .card__detail {
+      font-weight: 400;
+      font-size: 1.8rem;
+      transform: skewX(20deg);
+      padding: 1rem;
+    }
+
+    .card__detail--organic {
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 1.9rem;
+      background-image: linear-gradient(to right, #9be15d, #00e3ae);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .card__detail--price {
+      font-weight: 900;
+      font-size: 1.9rem;
+    }
+
+    .card__link:link,
+    .card__link:visited {
+      flex: 0 0 auto;
+      background-color: #79e17b;
+      color: white;
+      font-size: 1.6rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 2.5rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .card__link:hover,
+    .card__link:active {
+      background-color: #9be15d;
+    }
+
+    .card__link span {
+      transform: skewX(20deg);
+    }
+
+    .card:hover {
+      transform: skewX(-20deg) scale(1.08);
+      box-shadow: 0 3rem 8rem 2rem rgba(0, 0, 0, 0.15);
+    }
+
+    .emoji-left {
+      font-size: 2rem;
+      margin-right: 1rem;
+    }
+
+    .emoji-right {
+      font-size: 2rem;
+      margin-left: 1rem;
+    }
+
+    .not-organic {
+      display: none;
+    }
+
+    .product__back:link,
+    .product__back:visited {
+      position: absolute;
+      top: 2rem;
+      left: 2rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-decoration: none;
+      z-index: 1000;
+      color: #555;
+      background-color: white;
+      box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.3);
+      border-radius: 100rem;
+      padding: 0 2rem;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+    }
+
+    .product__back:hover,
+    .product__back:active {
+      background-color: #79e17b;
+    }
+
+    #window_overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      z-index: 10000;
+    }
+
+    #window_overlay.opened {
+      opacity: 1;
+      -webkit-transition: opacity 100ms;
+      transition: opacity 100ms;
+      visibility: visible;
+    }
+
+    .window_content {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%) scale(0, 0);
+      -webkit-transform: translate(-50%, -50%) scale(0, 0);
+      transform: translate(-50%, -50%) scale(0, 0);
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.75);
+      visibility: hidden;
+      z-index: 10001;
+    }
+
+    .window_content.opened {
+      -webkit-transition: transform 300ms;
+      transition: transform 300ms;
+      -ms-transform: translate(-50%, -50%) scale(1, 1);
+      -webkit-transform: translate(-50%, -50%) scale(1, 1);
+      transform: translate(-50%, -50%) scale(1, 1);
+      visibility: visible;
+      padding: 40px;
+      font-size: 18px;
+      font-weight: 400;
+      text-align: center;
+      background-color: #FFFFFF;
+    }
+
+    .window_content .window_close {
+      width: 30px;
+      height: 30px;
+      margin: -10px -10px 0 0;
+      border-radius: 50%;
+      background-color: #ec3f22;
+      color: #ffffff;
+      position: absolute;
+      right: 0;
+      top: 0;
+      text-align: center;
+      line-height: 30px;
+      font-size: 20px;
+      text-decoration: none;
+    }
+
+    .window_content .window_close:hover {
+      text-decoration: none;
+      background-color: #ec6922;
+    }
+
+    .window_content img {
+      display: inline;
+      max-width: 200px;
+    }
+
+    @media (max-width:1000px) {
+
+      .window_content {
+        margin-top: 5%;
+        width: 80%;
       }
 
-      html {
-        font-size: 62.5%;
-        box-sizing: border-box;
+      .window_content p {
+        margin-top: -80px;
       }
 
-      body {
-        padding: 5rem 5rem 10rem;
-        line-height: 1.7;
-        font-family: 'Kanit', sans-serif;
-        color: #555;
-        min-height: 100vh;
-        background: linear-gradient(to bottom right, #9be15d, #00e3ae);
+      .window_content.opened {
+        padding: 20px 30px;
+        font-size: 15px;
       }
 
-      h1 {
-        font-family: 'Kanit', sans-serif;
-        font-size: 5rem;
-        color: white;
-        transform: skewY(-5deg);
-        text-align: center;
-        position: relative;
-        word-spacing: 3px;
+      .window_content img {
+        display: none !important;
       }
 
-      h1::before {
-        content: '';
-        display: block;
-        height: 65%;
-        width: 49%;
-        position: absolute;
-        top: 105%;
-        left: 50%;
-        background: linear-gradient(to bottom, #9be15d, #00e3ae);
-        opacity: 0.8;
-        z-index: -1;
-        transform: skewY(370deg) translate(-50%, -50%);
-      }
+    }
 
-      .container {
-        width: 95rem;
-        margin: 0 auto;
-      }
+    #add {
+      top: 7.5rem;
+    }
 
-      .cards-container {
-        margin-top: 8rem;
-      }
+    .login__input {
+      border: none;
+      border-bottom: 2px solid #D1D1D4;
+      background: none;
+      padding: 10px;
+      padding-left: 24px;
+      font-weight: 700;
+      width: 75%;
+      transition: .2s;
+    }
 
-      .card {
-        background: white;
-        box-shadow: 0 2rem 6rem 1rem rgba(0, 0, 0, 0.15);
-        margin-bottom: 5rem;
-        transform: skewX(-20deg);
-        display: flex;
-        transition: all 0.5s;
-      }
+    .login__input:active,
+    .login__input:focus,
+    .login__input:hover {
+      outline: none;
+      border-bottom-color: #ec6922;
+    }
 
-      .card__emoji {
-        font-size: 4rem;
-        line-height: 1.2;
-        padding: 1.5rem 3rem 0.5rem 1.5rem;
-      }
+    .login__submit {
+      background: #fff;
+      font-size: 14px;
+      margin-top: 30px;
+      padding: 16px 20px;
+      border-radius: 26px;
+      border: 1px solid #D4D3E8;
+      text-transform: uppercase;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      color: #ec6922;
+      box-shadow: 0px 2px 2px #ec6922;
+      cursor: pointer;
+      transition: .2s;
+    }
 
-      .card__title-box {
-        background: linear-gradient(to bottom, #9be15d, #00e3ae);
-        margin-right: auto;
-        display: flex;
-        align-items: center;
-        padding: 0 3rem;
-      }
+    .login__submit:active,
+    .login__submit:focus,
+    .login__submit:hover {
+      border-color: #6A679E;
+      outline: none;
+    }
+  </style>
+</head>
 
-      .card__title {
-        font-family: 'Kanit', sans-serif;
-        color: white;
-        font-size: 3.25rem;
-        transform: skewX(20deg);
-      }
-
-      .card__details {
-        display: flex;
-      }
-
-      .card__detail-box {
-        align-self: stretch;
-        border-right: 1px solid #ddd;
-        display: flex;
-        align-items: center;
-      }
-
-      .card__detail-box:last-child {
-        border: none;
-      }
-
-      .card__detail {
-        font-weight: 400;
-        font-size: 1.8rem;
-        transform: skewX(20deg);
-        padding: 1rem;
-      }
-
-      .card__detail--organic {
-        font-weight: 900;
-        text-transform: uppercase;
-        font-size: 1.9rem;
-        background-image: linear-gradient(to right, #9be15d, #00e3ae);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
-
-      .card__detail--price {
-        font-weight: 900;
-        font-size: 1.9rem;
-      }
-
-      .card__link:link,
-      .card__link:visited {
-        flex: 0 0 auto;
-        background-color: #79e17b;
-        color: white;
-        font-size: 1.6rem;
-        font-weight: 900;
-        text-transform: uppercase;
-        text-decoration: none;
-        padding: 2.5rem;
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s;
-      }
-
-      .card__link:hover,
-      .card__link:active {
-        background-color: #9be15d;
-      }
-
-      .card__link span {
-        transform: skewX(20deg);
-      }
-
-      .card:hover {
-        transform: skewX(-20deg) scale(1.08);
-        box-shadow: 0 3rem 8rem 2rem rgba(0, 0, 0, 0.15);
-      }
-
-      .emoji-left {
-        font-size: 2rem;
-        margin-right: 1rem;
-      }
-
-      .emoji-right {
-        font-size: 2rem;
-        margin-left: 1rem;
-      }
-
-      .not-organic {
-        display: none;
-      }
-
-      .product__back:link,
-      .product__back:visited {
-        position: absolute;
-        top: 2rem;
-        left: 2rem;
-        font-size: 1.5rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        text-decoration: none;
-        z-index: 1000;
-        color: #555;
-        background-color: white;
-        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.3);
-        border-radius: 100rem;
-        padding: 0 2rem;
-        transition: all 0.3s;
-        display: flex;
-        align-items: center;
-      }
-
-      .product__back:hover,
-      .product__back:active {
-        background-color: #79e17b;
-      }
-
-      #add {
-        top: 7.5rem;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="container">
-      <a href="/overview" class="product__back">
-        <span class="emoji-left">👈</span>Back
-      </a>
-      <a href="#" class="product__back" id="add">
-        <span class="emoji-left">➕</span>Dodaj nowy pojazd
-      </a>
-      <h1>🚍 Pojazdy</h1>
-
-      <div class="cards-container">
-        {%BUSES_CARDS%}
-      </div>
+<body>
+  <div class="container">
+    <div id="window_overlay"></div>
+    <div id="window_entrance" class="window_content">
+      <a href="#" class="window_close">❌</a>
+      <h2>Dodaj pojazd</h2><br>
+      Wprowadź dane pojazdu, który chcesz dodać do bazy.<br><br>
+      <form id="form" method="POST" action="http://localhost:2555">
+        <div class="login__field">
+          <input type="text" id="brand" name="brand" class="login__input" placeholder="Marka pojazdu">
+        </div><br>
+        <div class="login__field">
+          <input type="text" id="model" name="model" class="login__input" placeholder="Model pojazdu">
+        </div><br>
+        <div class="login__field">
+          <input type="text" id="year" name="year" class="login__input" placeholder="Rok produkcji">
+        </div><br>
+        <div class="login__field">
+          <input type="text" id="number" name="number" class="login__input" placeholder="Numer taborowy">
+        </div><br>
+        <input type="submit" value=Dodaj class="button login__submit">
+      </form>
     </div>
-  </body>
+    <a href="/overview" class="product__back">
+      <span class="emoji-left">👈</span>Back
+    </a>
+    <a href="#" class="product__back" id="add">
+      <span class="emoji-left">➕</span>Dodaj nowy pojazd
+    </a>
+    <h1>🚍 Pojazdy</h1>
+    <div class="cards-container">
+      {%BUSES_CARDS%}
+    </div>
+  </div>
+  <script>
+    // if click button with id add, then show window 
+    document.getElementById("add").addEventListener("click", function () {
+      document.getElementById("window_entrance").classList.add("opened");
+      document.getElementById("window_overlay").classList.add("opened");
+    });
+    // if click button with class window_close, then hide window
+    document.querySelector(".window_close").addEventListener("click", function () {
+      document.getElementById("window_entrance").classList.remove("opened");
+      document.getElementById("window_overlay").classList.remove("opened");
+    });
+  </script>
+</body>
+
 </html>
