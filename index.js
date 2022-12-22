@@ -4,10 +4,9 @@ const url = require("url");
 const slugify = require("slugify");
 const axios = require("axios");
 const replaceTemplate = require("./modules/replaceTemplate");
-const { Console } = require("console");
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
-let data, dataStops, dataBuses
-  port = 2000;
+let data, dataStops, dataBuses;
+port = 2000;
 
 function getData(apiUrl) {
   return new Promise((resolve, reject) => {
@@ -43,7 +42,7 @@ function PostData(apiUrl, data) {
 async function refreshData() {
   dataStops = await getData(`https://localhost:7166/GetStop`);
   dataBuses = await getData(`https://localhost:7166/GetBuses`);
-  console.log(`Refresh data at time: ${new Date().toLocaleTimeString()}`)
+  console.log(`Refresh data at time: ${new Date().toLocaleTimeString()}`);
 }
 
 async function main() {
@@ -85,14 +84,16 @@ async function main() {
         "Content-type": "text/html",
       });
       if (dataBuses === undefined) {
-        setTimeout(() => { refreshData(); }, 1000);
+        setTimeout(() => {
+          refreshData();
+        }, 1000);
       }
       const busHtml = dataBuses.map((el) => replaceTemplate(busTempCard, el)).join("");
       const output = busTempOverview.replace("{%BUSES_CARDS%}", busHtml);
       res.end(output);
     } else if (pathname === "/bus") {
       res.writeHead(200, {
-        'Content-type': 'text/html'
+        "Content-type": "text/html",
       });
       let index = dataBuses.findIndex((el) => el.id == query.id);
       const product = dataBuses[index];
@@ -121,15 +122,21 @@ http
       });
       req.on("end", () => {
         console.log(body);
+        //check is data already exist if yes then don't add
+        if (dataStops.find((el) => el.number == body)) {
+          console.log("Autobus już istnieje");
+        }
         PostData(`https://localhost:7166/AddBus?`, body);
         data = undefined;
         res.writeHead(301, {
-          "location": "http://localhost:2000/",
+          location: "http://localhost:2000/",
         });
         res.end("Dodano autobus");
-        //check is data sended to server if not then wait 1s and try again
+        //check is data sended to server if not then wait 1s and try
         if (data === undefined) {
-          setTimeout(() => { refreshData(); }, 1000);
+          setTimeout(() => {
+            refreshData();
+          }, 1000);
         }
         refreshData();
       });

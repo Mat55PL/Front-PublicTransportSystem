@@ -6,6 +6,6 @@ module.exports = (temp, product) => {
   output = output.replace(/{%BUS_MODEL%}/g, product.model);
   output = output.replace(/{%BUS_NUMBER%}/g, product.number);
   output = output.replace(/{%BUS_YEAR%}/g, product.year);
-  output = output.replace(/{%BUS_IMG%}/g, "../assets/img/"+ product.number + ".jpg");
+  output = output.replace(/{%BUS_IMG%}/g, "/../assets/img/"+ product.number + ".jpg");
   return output;
 };

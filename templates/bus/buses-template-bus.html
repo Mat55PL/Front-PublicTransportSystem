@@ -261,21 +261,63 @@
         .not-organic {
             display: none;
         }
+        .product__back:link,
+        .product__back:visited {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        text-decoration: none;
+        z-index: 1000;
+        color: #555;
+        background-color: white;
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.3);
+        border-radius: 100rem;
+        padding: 0 2rem;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        }
+
+        .product__back:hover,
+        .product__back:active {
+        background-color: #79e17b;
+        }
+        .emoji-left {
+        font-size: 2rem;
+        margin-right: 1rem;
+        }
+
+        #edit {
+            top: 7rem;
+        }
+
+        #delete {
+            top: 12rem;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <h1>🚍 Szczegóły Pojazdu</h1>
-
+        <a href="/buses" class="product__back">
+            <span class="emoji-left">👈</span>Back
+        </a>
+        <a href="#" class="product__back" id="edit">
+            <span class="emoji-left">🖊️</span>Edytuj pojazd
+        </a>
+        <a href="#" class="product__back" id="delete">
+            <span class="emoji-left">🗑️</span>Usuń pojazd
+        </a>
         <figure class="product">
             <div class="product__organic {%NOT_ORGANIC%}">
                 <h5>🍃 EKO</h5>
             </div>
-            <a href="/buses" class="product__back">
-                <span class="emoji-left">👈</span>Back
-            </a>
-
+           
+            
             <div class="product__hero">
                 <!--
                 <span class="product__emoji product__emoji--1">{%IMAGE%}</span>
