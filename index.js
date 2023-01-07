@@ -64,7 +64,6 @@ async function refreshData(req) {
 }
 
 async function main() {
-  refreshData(req);
   const tempOverview = fs.readFileSync(`${__dirname}/templates/template-overview.html`, "utf8");
   const stopsTempOverview = fs.readFileSync(`${__dirname}/templates/stops-template-overview.html`, "utf8");
   const stopsTempCard = fs.readFileSync(`${__dirname}/templates/stops-template-card.html`, "utf8");
@@ -76,6 +75,7 @@ async function main() {
   //console.log(`slugs: ${slugs}`);
 
   const server = http.createServer((req, res) => {
+    refreshData(req);
     const { query, pathname } = url.parse(req.url, true);
 
     // Overview page
