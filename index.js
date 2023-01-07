@@ -7,16 +7,19 @@ const replaceTemplate = require("./modules/replaceTemplate");
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 let data, dataStops, dataBuses;
 const port = 2000,
-  serverIP = getServerIPAddress();
+  serverIP = getIPAddress();
 
-function getServerIPAddress() {
+function getIPAddress() {
   var interfaces = require("os").networkInterfaces();
   for (var devName in interfaces) {
     var iface = interfaces[devName];
 
     for (var i = 0; i < iface.length; i++) {
       var alias = iface[i];
-      if (alias.family === "IPv4" && alias.address !== "127.0.0.1" && !alias.internal) return alias.address;
+      if (alias.family === "IPv4" && alias.address !== "127.0.0.1" && !alias.internal) {
+        console.log(`[GetIPAdress]: ${alias.address}`);
+        return alias.address;
+      }
     }
   }
   return "Error: Can't get IP address";
@@ -53,17 +56,18 @@ function PostData(apiUrl, data) {
   });
 }
 
-async function refreshData(req) {
+async function refreshData() {
   try {
     dataStops = await getData(`https://localhost:7166/GetStop`);
     dataBuses = await getData(`https://localhost:7166/GetBuses`);
-    console.log(`Refresh data at time: ${new Date().toLocaleTimeString()} from UserIP: ${req.socket.localAddress}`);
+    console.log(`Refresh data at time: ${new Date().toLocaleTimeString()}`);
   } catch (err) {
     return console.log(`[refreshData()]: ${err}`);
   }
 }
 
 async function main() {
+  refreshData();
   const tempOverview = fs.readFileSync(`${__dirname}/templates/template-overview.html`, "utf8");
   const stopsTempOverview = fs.readFileSync(`${__dirname}/templates/stops-template-overview.html`, "utf8");
   const stopsTempCard = fs.readFileSync(`${__dirname}/templates/stops-template-card.html`, "utf8");
@@ -75,7 +79,6 @@ async function main() {
   //console.log(`slugs: ${slugs}`);
 
   const server = http.createServer((req, res) => {
-    refreshData(req);
     const { query, pathname } = url.parse(req.url, true);
 
     // Overview page
@@ -83,27 +86,28 @@ async function main() {
       res.writeHead(200, {
         "Content-type": "text/html",
       });
-      refreshData(req);
+      refreshData();
+      console.log(`Connected at time: ${new Date().toLocaleTimeString()} from ip: ${req.socket.remoteAddress}`);
       const cardsHtml = dataStops.map((el) => replaceTemplate(stopsTempCard, el)).join("");
       const output = tempOverview.replace("{%INFO_CARDS%}", cardsHtml);
       res.end(output);
     } else if (pathname === "/stop") {
-      refreshData(req);
+      refreshData();
       res.writeHead(200, {
         "Content-type": "text/html",
       });
-      refreshData(req);
+      refreshData();
       const stopsHtml = dataStops.map((el) => replaceTemplate(stopsTempCard, el)).join("");
       const output = stopsTempOverview.replace("{%STOPS_CARDS%}", stopsHtml);
       res.end(output);
     } else if (pathname === "/buses") {
-      refreshData(req);
+      refreshData();
       res.writeHead(200, {
         "Content-type": "text/html",
       });
       if (dataBuses === undefined) {
         setTimeout(() => {
-          refreshData(req);
+          refreshData();
         }, 1000);
       }
       const busHtml = dataBuses.map((el) => replaceTemplate(busTempCard, el)).join("");
@@ -153,10 +157,10 @@ http
         //check is data sended to server if not then wait 1s and try
         if (data === undefined) {
           setTimeout(() => {
-            refreshData(req);
+            refreshData();
           }, 1000);
         }
-        refreshData(req);
+        refreshData();
       });
     } else {
       res.end("Tylko POST");
