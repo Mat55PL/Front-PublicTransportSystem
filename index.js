@@ -7,7 +7,7 @@ const replaceTemplate = require("./modules/replaceTemplate");
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 let data, dataStops, dataBuses;
 const port = 2000,
-  server = "51.83.129.124";
+  serverIP = "51.83.129.124";
 
 function getData(apiUrl) {
   return new Promise((resolve, reject) => {
@@ -113,8 +113,8 @@ async function main() {
     }
   });
 
-  server.listen(port, server, () => {
-    console.log(`Listening on ${server}:${port}`);
+  server.listen(port, serverIP, () => {
+    console.log(`Listening on ${serverIP}:${port}`);
   });
 }
 
