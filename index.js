@@ -40,8 +40,13 @@ function PostData(apiUrl, data) {
 }
 
 async function refreshData() {
-  dataStops = await getData(`https://localhost:7166/GetStop`);
-  dataBuses = await getData(`https://localhost:7166/GetBuses`);
+  try {
+    dataStops = await getData(`https://localhost:7166/GetStop`);
+    dataBuses = await getData(`https://localhost:7166/GetBuses`);
+  } catch (err) {
+    console.log(`ERR: ${err}`);
+  }
+
   console.log(`Refresh data at time: ${new Date().toLocaleTimeString()}`);
 }
 
