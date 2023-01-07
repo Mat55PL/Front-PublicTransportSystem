@@ -43,11 +43,10 @@ async function refreshData() {
   try {
     dataStops = await getData(`https://localhost:7166/GetStop`);
     dataBuses = await getData(`https://localhost:7166/GetBuses`);
+    console.log(`Refresh data at time: ${new Date().toLocaleTimeString()}`);
   } catch (err) {
-    console.log(`ERR: ${err}`);
+    return console.log(`[refreshData()]: ${err}`);
   }
-
-  console.log(`Refresh data at time: ${new Date().toLocaleTimeString()}`);
 }
 
 async function main() {
