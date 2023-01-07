@@ -7,9 +7,9 @@ const replaceTemplate = require("./modules/replaceTemplate");
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 let data, dataStops, dataBuses;
 const port = 2000,
-  serverIP = "51.83.129.124";
+  serverIP = getServerIPAddress();
 
-function getIPAddress() {
+function getServerIPAddress() {
   var interfaces = require("os").networkInterfaces();
   for (var devName in interfaces) {
     var iface = interfaces[devName];
@@ -53,18 +53,18 @@ function PostData(apiUrl, data) {
   });
 }
 
-async function refreshData() {
+async function refreshData(req) {
   try {
     dataStops = await getData(`https://localhost:7166/GetStop`);
     dataBuses = await getData(`https://localhost:7166/GetBuses`);
-    console.log(`Refresh data at time: ${new Date().toLocaleTimeString()} from IP: ${getIPAddress()}`);
+    console.log(`Refresh data at time: ${new Date().toLocaleTimeString()} from UserIP: ${req.socket.localAddress}`);
   } catch (err) {
     return console.log(`[refreshData()]: ${err}`);
   }
 }
 
 async function main() {
-  refreshData();
+  refreshData(req);
   const tempOverview = fs.readFileSync(`${__dirname}/templates/template-overview.html`, "utf8");
   const stopsTempOverview = fs.readFileSync(`${__dirname}/templates/stops-template-overview.html`, "utf8");
   const stopsTempCard = fs.readFileSync(`${__dirname}/templates/stops-template-card.html`, "utf8");
@@ -83,27 +83,27 @@ async function main() {
       res.writeHead(200, {
         "Content-type": "text/html",
       });
-      refreshData();
+      refreshData(req);
       const cardsHtml = dataStops.map((el) => replaceTemplate(stopsTempCard, el)).join("");
       const output = tempOverview.replace("{%INFO_CARDS%}", cardsHtml);
       res.end(output);
     } else if (pathname === "/stop") {
-      refreshData();
+      refreshData(req);
       res.writeHead(200, {
         "Content-type": "text/html",
       });
-      refreshData();
+      refreshData(req);
       const stopsHtml = dataStops.map((el) => replaceTemplate(stopsTempCard, el)).join("");
       const output = stopsTempOverview.replace("{%STOPS_CARDS%}", stopsHtml);
       res.end(output);
     } else if (pathname === "/buses") {
-      refreshData();
+      refreshData(req);
       res.writeHead(200, {
         "Content-type": "text/html",
       });
       if (dataBuses === undefined) {
         setTimeout(() => {
-          refreshData();
+          refreshData(req);
         }, 1000);
       }
       const busHtml = dataBuses.map((el) => replaceTemplate(busTempCard, el)).join("");
@@ -153,10 +153,10 @@ http
         //check is data sended to server if not then wait 1s and try
         if (data === undefined) {
           setTimeout(() => {
-            refreshData();
+            refreshData(req);
           }, 1000);
         }
-        refreshData();
+        refreshData(req);
       });
     } else {
       res.end("Tylko POST");
