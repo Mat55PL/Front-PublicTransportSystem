@@ -9,6 +9,19 @@ let data, dataStops, dataBuses;
 const port = 2000,
   serverIP = "51.83.129.124";
 
+function getIPAddress() {
+  var interfaces = require("os").networkInterfaces();
+  for (var devName in interfaces) {
+    var iface = interfaces[devName];
+
+    for (var i = 0; i < iface.length; i++) {
+      var alias = iface[i];
+      if (alias.family === "IPv4" && alias.address !== "127.0.0.1" && !alias.internal) return alias.address;
+    }
+  }
+  return "Error: Can't get IP address";
+}
+
 function getData(apiUrl) {
   return new Promise((resolve, reject) => {
     axios
@@ -44,7 +57,7 @@ async function refreshData() {
   try {
     dataStops = await getData(`https://localhost:7166/GetStop`);
     dataBuses = await getData(`https://localhost:7166/GetBuses`);
-    console.log(`Refresh data at time: ${new Date().toLocaleTimeString()}`);
+    console.log(`Refresh data at time: ${new Date().toLocaleTimeString()} from IP: ${getIPAddress()}`);
   } catch (err) {
     return console.log(`[refreshData()]: ${err}`);
   }
