@@ -151,7 +151,7 @@ http
         PostData(`https://localhost:7166/AddBus?`, body);
         data = undefined;
         res.writeHead(301, {
-          location: "http://localhost:2000/",
+          location: `http://${serverIP}:2000/`,
         });
         res.end("Dodano autobus");
         //check is data sended to server if not then wait 1s and try
