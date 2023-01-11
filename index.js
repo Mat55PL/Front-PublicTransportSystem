@@ -166,6 +166,6 @@ http
       res.end("Tylko POST");
     }
   })
-  .listen(2555);
+  .listen(2555, serverIP);
 
 main();
